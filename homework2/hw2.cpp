@@ -21,6 +21,7 @@ double get_height(double h0, double vy, double t)
     return h0 + vy*t - 9.81/2 * pow(t, 2);
 }
 
+
 void get_h0(ifstream &input_file, double &h) // Функция получения начальной высоты
 {
     string temp;
@@ -45,6 +46,7 @@ void get_bar(ifstream &input_file,vector<double> &X, vector<double> &H) // фу�
     X.push_back(stod(x));
     H.push_back(stod(h));
 }
+
 void calculate_2(double x0,double h0, double vx, double vy, vector<double> &X, vector<double> &H, int &result,
                  int dir)
 {
@@ -97,4 +99,43 @@ void calculate_1(ifstream &input_file, double &h0, double &vx, double &vy, vecto
             return;
         }
     }
+}
+
+
+int main(int argc, char** argv)
+{
+    string input_filename;
+
+    if (argc == 2)
+    {
+        input_filename = argv[1];
+    } else {
+        input_filename = "input.txt";
+    }
+    ifstream input_file(input_filename);
+
+    // Начальные данные
+    double h0;
+    double vx;
+    double vy;
+
+    // Результат
+    int result = 0;
+
+    // Дополнительные данные
+    int i = 0;
+    string line;
+
+    // Координаты
+    vector<double> X;
+    vector<double> H;
+
+    // Получаем начальные данные
+    get_h0(input_file, h0);
+    get_v0(input_file, vx, vy);
+
+    calculate_1(input_file, h0, vx, vy, X, H, result);
+
+    cout << result << endl;
+    return 0;
 }
