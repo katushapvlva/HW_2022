@@ -19,7 +19,7 @@ int main()
 	while (infile >> x >> y)
 	{
 		double cos = (x0*x+y0*y)/(sqrt(x*x+y*y)*sqrt(x0*x0+y0*y0));
-		cos = std::round(cos);
+		cos = std::round(cos * 10000000000.0) / 10000000000.0;
         
 		if (cos <= cos_left && (y0*x < x0*y)) 
 		{
