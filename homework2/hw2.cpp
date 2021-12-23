@@ -17,7 +17,7 @@ int main(int argc, char** argv) {
         double vx, vy;
         infile >> vx >> vy;
 
-        int g = -10;
+        double g = -9.81;
 
         int interval = 0;
         int size = 0;
