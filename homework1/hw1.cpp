@@ -1,3 +1,5 @@
+// Подключаем библиотеки
+
 #include <stdlib.h>
 #include <iostream>
 #include <fstream>
@@ -5,6 +7,8 @@
 
 int main()
 {
+	
+	// Чтение файла
 	std::ifstream infile("in.txt");
 
 	int x, y;
@@ -18,6 +22,8 @@ int main()
     
 	while (infile >> x >> y)
 	{
+		
+		// Считаем угол между векторами
 		double cos = (x0*x+y0*y)/(sqrt(x*x+y*y)*sqrt(x0*x0+y0*y0));
 		cos = std::round(cos * 10000000000.0) / 10000000000.0;
         
@@ -36,6 +42,8 @@ int main()
 		}
 	}
 
+	
+	// Вывод
 	std::cout << "Leftmost: " << x_left << " " << y_left << "\n";
 	std::cout << "Rightmost: " << x_right << " " << y_right << "\n";
 }
