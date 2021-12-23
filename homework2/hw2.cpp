@@ -6,7 +6,7 @@
 
 using namespace std;
 
-double get_t(double x0, double x, double vx,int dir)
+double get_t(double x0, double x, double vx, int dir)
 {
     return (x - x0)/(dir*vx);
 }
@@ -29,7 +29,7 @@ void get_h0(ifstream &input_file, double &h) // Функция получени�
     h = stod(temp);
 }
 
-void get_v0(ifstream &input_file, double &vx,double &vy) // Функция получения начальной скорости
+void get_v0(ifstream &input_file, double &vx, double &vy) // Функция получения начальной скорости
 {
     string v1;
     string v2;
