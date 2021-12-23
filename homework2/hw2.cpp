@@ -29,9 +29,9 @@ int main(int argc, char** argv) {
                 return 0;
             }
             if (target > size - 1) {
-                double x_obs, h_obs;
-                if (infile >> x_obs >> h_obs) {
-                    partition.push_back(std::make_pair(x_obs, h_obs));
+                double x_part, h_part;
+                if (infile >> x_part >> h_part) {
+                    partition.push_back(std::make_pair(x_part, h_part));
                     size++;
                 } else {
                     std::cout << size << std::endl;
