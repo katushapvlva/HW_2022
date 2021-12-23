@@ -1,3 +1,5 @@
+// Подключаем библиотеки
+
 #include <iostream>
 #include <fstream>
 #include <utility>
@@ -6,6 +8,8 @@
 
 int main(int argc, char** argv) {
     if (argc == 2) {
+        
+        // Чтение файла
         std::ifstream infile(argv[1]);
 
         std::vector < std::pair < double, double >> partition;
