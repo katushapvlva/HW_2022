@@ -1,141 +1,60 @@
 #include <iostream>
 #include <fstream>
+#include <utility>
 #include <vector>
 #include <cmath>
-#include <algorithm>
 
-using namespace std;
+int main(int argc, char** argv) {
+    if (argc == 2) {
+        std::ifstream infile(argv[1]);
 
-double find_t(double x0, double x, double vx, int dir)
-{
-    return (x - x0)/(dir*vx);
-}
+        std::vector < std::pair < double, double >> obstacles;
+        double h;
+        double x = 0;
 
-double find_vy(double vy0, double t)
-{
-    return vy0 - 10*t;
-}
+        infile >> h;
 
-double find_h(double h0, double vy, double t)
-{
-    return h0 + vy*t - 9.81/2 * pow(t, 2);
-}
+        double vx, vy;
+        infile >> vx >> vy;
 
+        double g = -9.81;
 
-void find_h0(ifstream &input_file, double &h) // Функция получения начальной высоты
-{
-    string temp;
-    input_file >> temp;
-    h = stod(temp);
-}
+        int interval = 0;
+        int size = 0;
 
-void find_v0(ifstream &input_file, double &vx, double &vy) // Функция получения начальной скорости
-{
-    string v1;
-    string v2;
-    input_file >> v1 >> ws >> v2;
-    vx = stod(v1);
-    vy = stod(v2);
-}
+        while (true) {
+            int target = (vx > 0) ? interval : interval - 1;
+            if (target < 0) {
+                std::cout << "0" << std::endl;
+                return 0;
+            }
+            if (target > size - 1) {
+                double x_obs, h_obs;
+                if (infile >> x_obs >> h_obs) {
+                    obstacles.push_back(std::make_pair(x_obs, h_obs));
+                    size++;
+                } else {
+                    std::cout << size << std::endl;
+                    return 0;
+                }
 
-void find_past(ifstream &input_file, vector<double> &X, vector<double> &H) // функция считывания параметров столбов
-{
-    string x;
-    string h;
-    input_file >> x >> ws >> h;
-    X.push_back(stod(x));
-    H.push_back(stod(h));
-}
+            }
 
-void calculate_2(double x0, double h0, double vx, double vy, vector<double> &X, vector<double> &H, int &result,
-                 int dir)
-{
-    double y;
-    double t;
-    for (int i = result; (i > -1 && i < X.size()); i = i + dir)
-    {
-        t = find_t(x0, X[i+dir], vx, dir);
-        y = find_h(h0, vy, t);
-        if (H[i + dir] < y)
-        {
-            result += dir;
-        } else if((y < 0) || (result == 0))
-        {
-            return;
-        }
-        else
-        {
-            double vyt = find_vy(vy, t);
-            dir = dir * -1;
-            calculate_2(X[i], y, vx, vyt, X, H, result, dir);
-            return;
+            double t = std::abs((x - obstacles[target].first) / vx);
+
+            x = obstacles[target].first;
+            h = h + vy * t + 0.5 * g * t * t;
+            vy = vy + g * t;
+
+            if (h <= 0) {
+                std::cout << interval << std::endl;
+                return 0;
+            }
+            if (h > obstacles[target].second) {
+                (vx > 0) ? interval++ : interval--;
+            } else {
+                vx = vx * (-1);
+            }
         }
     }
-}
-
-void calculate_1(ifstream &input_file, double &h0, double &vx, double &vy, vector<double> &X, vector<double> &H,
-    int &result)
-{
-    string line;
-    double t;
-    double y;
-    while (getline(input_file, line))
-    {
-        find_past(input_file, X, H);
-        t = find_t(0, X.back(), vx, 1);
-        y = find_h(h0, vy, t);
-        if(H.back() < y)
-        {
-            result++;
-        }
-        else if((y < 0) || (result == 0))
-        {
-            return;
-        }
-        else
-        {
-            double vyt = find_vy(vy, t);
-            calculate_2(X.back(), y, vx, vyt, X, H, result, -1);
-            return;
-        }
-    }
-}
-
-
-int main(int argc, char** argv)
-{
-    string input_filename;
-
-    if (argc == 2)
-    {
-        input_filename = argv[1];
-    } else {
-        input_filename = "input.txt";
-    }
-    ifstream input_file(input_filename);
-
-    // Начальные данные
-    double h0;
-    double vx;
-    double vy;
-
-    // Результат
-    int result = 0;
-
-    // Дополнительные данные
-    int i = 0;
-    string line;
-
-    // Координаты
-    vector<double> X;
-    vector<double> H;
-
-    // Получаем начальные данные
-    find_h0(input_file, h0);
-    find_v0(input_file, vx, vy);
-
-    calculate_1(input_file, h0, vx, vy, X, H, result);
-
-    cout << result << endl;
-    return 0;
 }
