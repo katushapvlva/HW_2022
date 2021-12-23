@@ -52,7 +52,8 @@ int main(int argc, char** argv) {
             }
             if (h > partition[target].second) {
                 (vx > 0) ? interval++ : interval--;
-            } else {
+            } 
+            else {
                 vx = vx * (-1);
             }
         }
