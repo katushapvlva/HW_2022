@@ -8,7 +8,7 @@ int main(int argc, char** argv) {
     if (argc == 2) {
         std::ifstream infile(argv[1]);
 
-        std::vector < std::pair < double, double >> obstacles;
+        std::vector < std::pair < double, double >> partition;
         double h;
         double x = 0;
 
@@ -31,7 +31,7 @@ int main(int argc, char** argv) {
             if (target > size - 1) {
                 double x_obs, h_obs;
                 if (infile >> x_obs >> h_obs) {
-                    obstacles.push_back(std::make_pair(x_obs, h_obs));
+                    partition.push_back(std::make_pair(x_obs, h_obs));
                     size++;
                 } else {
                     std::cout << size << std::endl;
@@ -40,9 +40,9 @@ int main(int argc, char** argv) {
 
             }
 
-            double t = std::abs((x - obstacles[target].first) / vx);
+            double t = std::abs((x - partition[target].first) / vx);
 
-            x = obstacles[target].first;
+            x = partition[target].first;
             h = h + vy * t + 0.5 * g * t * t;
             vy = vy + g * t;
 
@@ -50,7 +50,7 @@ int main(int argc, char** argv) {
                 std::cout << interval << std::endl;
                 return 0;
             }
-            if (h > obstacles[target].second) {
+            if (h > partition[target].second) {
                 (vx > 0) ? interval++ : interval--;
             } else {
                 vx = vx * (-1);
